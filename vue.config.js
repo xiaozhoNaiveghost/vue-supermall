@@ -5,7 +5,7 @@ module.exports = {
         // 起别名
         "assets": '@/assets',
         "common": '@/common',
-        "commponents": '@/components',
+        "components": '@/components',
         "network": '@/network',
         "views": '@/views',
       }
