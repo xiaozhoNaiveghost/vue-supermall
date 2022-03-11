@@ -11,7 +11,7 @@
 <script>
 import {Swiper,SwiperItem} from 'components/common/swiper/index'
 
-export default ({
+export default {
   name:'HomeSwiper',
   props:{
     banners:{
@@ -25,7 +25,7 @@ export default ({
     Swiper,
     SwiperItem
   }
-})
+}
 </script>
 
 <style scoped>

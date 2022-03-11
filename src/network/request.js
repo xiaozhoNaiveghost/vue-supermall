@@ -3,7 +3,7 @@ import axios from "axios";
 export function request(config) {
   // 方法1.创建aios的实例
   const instance = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: 'config',
     timeout: '10000',
   })
   // 2.axios的拦截器

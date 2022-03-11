@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-export default ({
+export default {
   name:'HomeRecommendVieww',
   props:{
     recommends:{
@@ -20,15 +20,20 @@ export default ({
       }
     }
   },
-})
+}
 </script>
 <style scoped>
 .recommend{
  display: flex;
+ width: 100%;
+ text-align:center;
+ font-size: 12px;
+
+ padding: 15px 0 30px;
+ border-bottom: 8px solid #eee;
 }
 .div-img{
  flex: 1;
- text-align:center;
 }
 img{
   width: 75px;
