@@ -1,5 +1,5 @@
 # vue-supermall
-
+# 第一个小程序，SPA单页面副应用
 ## Project setup
 ```
 npm install
