@@ -27,7 +27,8 @@ export default{
   },
   methods:{
     itemcick(index){
-      this.currentIndex = index
+      this.currentIndex = index;
+      this.$emit('tabClick',index)
     }
   }
 }
