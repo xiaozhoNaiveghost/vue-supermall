@@ -40,17 +40,24 @@ export default {
       // console.log(position);
       this.$emit('scroll',position)
     })
-    this.scroll.on('pullingUp',()=>{
-      this.$emit('pullingUp')
-    })
+    
+    if (this.pullingUp) {
+      this.scroll.on('pullingUp',()=>{
+       this.$emit('pullingUp')
+      })
+    }
   },
   
   methods:{
     scrollTo(x=0,y=0,tiem=500){
-      this.scroll.scrollTo(x,y,tiem)
+      this.scroll && this.scroll.scrollTo(x,y,tiem)
     },
     finisPullUp(){
       this.scroll.finishPullUp()
+    },
+    refresh(){
+      // console.log('----------');
+      this.scroll.refresh()
     }
 
   },

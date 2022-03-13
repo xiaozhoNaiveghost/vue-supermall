@@ -1,19 +1,27 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+   <tab-control class="tab-control" 
+      :titles="['流行','新款','精选']"
+      @tabClick='tabClick'
+      ref="tabControl1" v-show=isTabFixed></tab-control>
    <scroll class="content"
-    ref="scroll" :probe-type=3 
-    @scroll=contentScroll :pulling-up=true
+    ref="scroll" 
+    :probe-type=3 
+    @scroll=contentScroll 
+    :pulling-up="true"
     @pullingUp=loadMore>
-      <home-swiper :banners="banners"></home-swiper>
+      <home-swiper :banners="banners" @swiperImgeLoad=swiperImgeLoad></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature-view></home-feature-view>
       <tab-control class="tab-control" 
       :titles="['流行','新款','精选']"
-      @tabClick='tabClick'></tab-control>
+      @tabClick='tabClick'
+      ref="tabControl2" v-show=!isTabFixed></tab-control>
       <goods-list :goods="showGoods"></goods-list>
    </scroll>
-   <back-top @click.native="backClick" v-show=isshow></back-top>
+   <back-top @click.native="backClick" 
+   v-show=isshow></back-top>
   </div>
 </template>
 
@@ -31,7 +39,7 @@ import HomeFeatureView from './chlidComps/HomeFeatureView.vue';
 
 
 import {getHomeMultidata,getHomeGoods} from 'network/home'
-
+import {debounce} from 'common/utils'
 //插件
 export default {
   name:"Home",
@@ -58,8 +66,10 @@ export default {
       },
       goodskey:'pop',
       // showGoods,
-      isshow:false
-    } 
+      isshow:false,
+      tabOffsetTop:0,
+      isTabFixed:false
+    }
   },
   computed:{
     showGoods(){
@@ -75,6 +85,18 @@ export default {
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
   },
+  mounted(){
+    //1.事件监听
+    //监听item中图片加载完成
+    //  this.$bus.$on('imgaeLoad',()=>{
+      // this.$refs.scroll.refresh() //内部会调整重新计算高度
+    //  console.log('----------');
+    //  })
+    const refresh = debounce(this.$refs.scroll.refresh,200)
+    this.$bus.$on('imgaeLoad',()=>{
+    refresh()
+   })
+},
   methods:{
     //事件绑定监听
     tabClick(index){
@@ -89,17 +111,26 @@ export default {
         this.goodskey= 'sell'
         break;
       }
+      this.$refs.tabControl1.currentIndex = index
+      this.$refs.tabControl2.currentIndex = index
     },
     backClick(){
      this.$refs.scroll.scrollTo(0,0,1000)
     //  console.log(this.$refs.scroll.massage);
     },
     contentScroll(position){
+      //1.判断BackTop 是否显示
        this.isshow = (-position.y) > 900 ? true : false 
+      
+      //2.决定tabControl是否吸顶(position:flexd)
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
     },
     loadMore(){
     this.getHomeGoods(this.goodskey)
-    this.$refs.scroll.scroll.refresh()
+    // this.$refs.scroll.refresh() //内部会调整重新计算高度
+    },
+    swiperImgeLoad(){
+    this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
     },
 
     //网络请求 封装
@@ -113,7 +144,7 @@ export default {
   getHomeGoods(type){
     const page = this.goods[type].page + 1
     getHomeGoods(type,page).then(res =>{
-      console.log(res);
+      // console.log(res);
       this.goods[type].list.push(...res.data.list)
       this.goods[type].page += 1
       this.$refs.scroll.finisPullUp()
@@ -142,7 +173,7 @@ export default {
   top: 42px;
 }
 .content{
-height: calc(100% - 98px);
+height: calc(100% - 54px);
 overflow: hidden;
 margin-top: 44px;
 }

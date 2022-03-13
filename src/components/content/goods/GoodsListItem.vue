@@ -1,7 +1,7 @@
 <template>
   <div class="goods-item">
    <a :href="goodsItem.clientUrl">
-     <img :src="goodsItem.show.img">
+     <img :src="goodsItem.show.img" alt="" @load="imgaeLoad">
    <div class="goods-info" >
      <p>{{goodsItem.title}}</p>
      <span class="price">{{goodsItem.price+"￥"}}</span>
@@ -19,6 +19,14 @@ export default {
       default(){
         return {}
       }
+    }
+  },
+  methods:{
+        /* <img :src="goodsItem.show.img" alt="" @load="imgaeLoad">
+          @load是vue事件 在原生里面是 img.onload = funcion(){}
+        */ 
+    imgaeLoad(){
+      this.$bus.$emit('imgaeLoad')
     }
   }
 }
