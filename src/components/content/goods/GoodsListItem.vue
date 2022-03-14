@@ -1,13 +1,11 @@
 <template>
-  <div class="goods-item">
-   <a :href="goodsItem.clientUrl">
+  <div class="goods-item" @click="itemClock">
      <img :src="goodsItem.show.img" alt="" @load="imgaeLoad">
    <div class="goods-info" >
      <p>{{goodsItem.title}}</p>
      <span class="price">{{goodsItem.price+"￥"}}</span>
      <span class="collect">{{goodsItem.cfav}}</span>
    </div>
-  </a>
   </div>
 </template>
 <script>
@@ -27,6 +25,9 @@ export default {
         */ 
     imgaeLoad(){
       this.$bus.$emit('imgaeLoad')
+    },
+    itemClock(){
+      this.$router.push('/detail/' + this.goodsItem.iid)
     }
   }
 }

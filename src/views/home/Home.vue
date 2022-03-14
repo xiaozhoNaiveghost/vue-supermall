@@ -68,13 +68,21 @@ export default {
       // showGoods,
       isshow:false,
       tabOffsetTop:0,
-      isTabFixed:false
+      isTabFixed:false,
+      saveY:0
     }
   },
   computed:{
     showGoods(){
       return this.goods[this.goodskey].list
     }
+  },
+  activated(){
+    this.$refs.scroll.scrollTo(0,this.saveY,0)
+    this.$refs.scroll.refresh()
+},
+  deactivated(){
+    this.saveY = this.$refs.scroll.getScrollY()
   },
   created(){
     //1.请求多个数据
