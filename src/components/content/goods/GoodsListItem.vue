@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClock">
-     <img :src="goodsItem.show.img" alt="" @load="imgaeLoad">
+     <img :src="showImage" alt="" @load="imgaeLoad">
    <div class="goods-info" >
      <p>{{goodsItem.title}}</p>
      <span class="price">{{goodsItem.price+"￥"}}</span>
@@ -19,13 +19,24 @@ export default {
       }
     }
   },
+  computed:{
+    showImage(){
+      return this.goodsItem.image || this.goodsItem.show.img
+ }
+  },
   methods:{
         /* <img :src="goodsItem.show.img" alt="" @load="imgaeLoad">
           @load是vue事件 在原生里面是 img.onload = funcion(){}
         */ 
     imgaeLoad(){
+      // 路由修改
+      // if (this.$route.path.indexOf('/home')) {
+      //   this.$bus.$emit('homeimgaeLoad')
+      // }else if(this.$route.path.indexOf('/detail')){
+      //   this.$bus.$emit('detailimgaeLoad')
+      // }
       this.$bus.$emit('imgaeLoad')
-    },
+  },
     itemClock(){
       this.$router.push('/detail/' + this.goodsItem.iid)
     }

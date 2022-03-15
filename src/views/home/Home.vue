@@ -69,7 +69,8 @@ export default {
       isshow:false,
       tabOffsetTop:0,
       isTabFixed:false,
-      saveY:0
+      saveY:0,
+      itemImgListener:null
     }
   },
   computed:{
@@ -83,6 +84,9 @@ export default {
 },
   deactivated(){
     this.saveY = this.$refs.scroll.getScrollY()
+
+    //可以取消全局事件的监听
+    this.$bus.$off('imgaeLoad',this.itemImgListener)
   },
   created(){
     //1.请求多个数据
@@ -101,9 +105,12 @@ export default {
     //  console.log('----------');
     //  })
     const refresh = debounce(this.$refs.scroll.refresh,200)
-    this.$bus.$on('imgaeLoad',()=>{
+    
+    this.itemImgListener = () =>{
     refresh()
-   })
+    }
+    
+    this.$bus.$on('imgaeLoad',this.itemImgListener)
 },
   methods:{
     //事件绑定监听
