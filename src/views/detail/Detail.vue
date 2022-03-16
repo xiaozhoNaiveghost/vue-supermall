@@ -1,15 +1,20 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="content" ref='scroll' :pulling-up="true">
+    <detail-nav-bar class="detail-nav"
+    @titleClick='titleClick' ref="nav"></detail-nav-bar>
+    <scroll class="content" 
+    ref='scroll' 
+    :pulling-up="true"
+    @scroll="contentScroll"
+    :probe-type='3'>
       <detail-swiper :top-images='topImages'></detail-swiper>
       <detail-baseinfo :goods='goods'></detail-baseinfo>
       <detail-shop-info :shop='shop'></detail-shop-info>
       <detail-goods-info  :detailInfo='detailInfo'
       @imageLoad = "imageLoad"></detail-goods-info>
-      <detail-param-info :paramInfo="itemParams"></detail-param-info>
-      <detail-comment-info :commentInfo='commentInfo'></detail-comment-info>
-      <goods-list :goods='recommends'></goods-list>
+      <detail-param-info ref="recparams" :paramInfo="itemParams"></detail-param-info>
+      <detail-comment-info ref="reccomment" :commentInfo='commentInfo'></detail-comment-info>
+      <goods-list ref="reccommend" :goods='recommends'></goods-list>
     </scroll>
   </div>
 </template>
@@ -55,8 +60,10 @@ export default {
       itemParams:{},
       commentInfo:{},
       recommends:[],
-      itemImgListener:null
-
+      itemImgListener:null,
+      themeTopYs:[],
+      getThemeTopY:null,
+      currentIndex:0
     }
   },
   created(){
@@ -82,13 +89,23 @@ export default {
       this.commentInfo = data.rate.list[0]
     }
     // console.log(this.commentInfo);
-    })
+  })
 
     //请求推荐数据
     getRecommend().then(res=>{
       this.recommends = res.data.list
       // console.log(this.recommends);
     })
+
+    this.getThemeTopY = debounce(()=>{
+      // 点击导航栏应该移动的距离
+       this.themeTopYs = []
+      this.themeTopYs.push(0);
+      this.themeTopYs.push(this.$refs.recparams.$el.offsetTop);
+      this.themeTopYs.push(this.$refs.reccomment.$el.offsetTop);
+      this.themeTopYs.push(this.$refs.reccommend.$el.offsetTop);
+      // console.log(this.themeTopYs);
+    },300)
   },
    mounted() {
     let newRefresh = debounce(this.$refs.scroll.refresh,200)
@@ -99,10 +116,39 @@ export default {
   },
   destroyed(){
     this.$bus.$off('imgaeLoad',this.itemImgListener)
+ 
+  
+  
+  
+  
+  
   },
   methods:{
     imageLoad(){
       this.$refs.scroll.refresh()
+
+      this.getThemeTopY()
+    },
+    titleClick(index){
+      // console.log(index);
+      this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],300)
+    },
+    contentScroll(position){
+      // 1.获取y值
+      const positionY = -position.y
+      // this.themeTopYs遍历值
+      // console.log(positionY);
+      let length = this.themeTopYs.length
+      for (let i = 0;i < length;i++) {
+        // console.log(i);
+        if (this.currentIndex !== i &&((i < length-1 && positionY >= this.themeTopYs[i] 
+        && positionY < this.themeTopYs[i+1]) || 
+        (i === length-1 && positionY >= this.themeTopYs[i]))) {
+          this.currentIndex = i
+          // console.log(this.currentIndex);
+          this.$refs.nav.currenindex = this.currentIndex
+        }
+      }
     }
   },
 }

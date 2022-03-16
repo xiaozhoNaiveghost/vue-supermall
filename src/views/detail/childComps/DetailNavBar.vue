@@ -30,7 +30,8 @@ export default {
     },
     methods:{
       titleclick(index){
-        this.currenindex = index
+        this.currenindex = index;
+        this.$emit('titleClick',index);
       },
       imgclick(){
         this.$router.go(-1)
