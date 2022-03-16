@@ -14,7 +14,7 @@ export default {
 <style scoped>
 .back-top{
   position: absolute;
-  z-index: 9999;
+  z-index: 100;
   float: left;
   /* top: 0; */
   right: 10px;

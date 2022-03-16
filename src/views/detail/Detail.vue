@@ -16,6 +16,7 @@
       <detail-comment-info ref="reccomment" :commentInfo='commentInfo'></detail-comment-info>
       <goods-list ref="reccommend" :goods='recommends'></goods-list>
     </scroll>
+    <detail-buttom-bar></detail-buttom-bar>
   </div>
 </template>
 
@@ -29,7 +30,7 @@ import DetailGoodsInfo from './childComps/DetailGoodsInfo.vue'
 import DetailParamInfo from './childComps/DetailParamInfo.vue'
 import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
 import GoodsList from 'components/content/goods/GoodsList.vue'
-
+import DetailButtomBar from './childComps/DetailButtomBar.vue'
 //工具
 import {GetDetail,getRecommend,Goods,Shop,GoodsParam} from 'network/detail.js'
 import Scroll from 'components/common/scroll/Scroll.vue'
@@ -46,6 +47,7 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     GoodsList,
+    DetailButtomBar,
 
     Scroll,
     

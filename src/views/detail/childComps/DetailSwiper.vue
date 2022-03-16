@@ -2,7 +2,7 @@
 <div>
   <swiper class="swiper-item">
       <swiper-item v-for="item in topImages"> 
-          <img :src="item" alt="">
+          <img :src="item" alt="" class="">
       </swiper-item>
     </swiper>
   </div>
