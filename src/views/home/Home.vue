@@ -21,7 +21,7 @@
       <goods-list :goods="showGoods"></goods-list>
    </scroll>
    <back-top @click.native="backClick" 
-   v-show=isshow></back-top>
+   v-show=isshow class="back-top"></back-top>
   </div>
 </template>
 
@@ -40,6 +40,7 @@ import HomeFeatureView from './chlidComps/HomeFeatureView.vue';
 
 import {getHomeMultidata,getHomeGoods} from 'network/home'
 import {debounce} from 'common/utils'
+import {backTopMixin} from 'common/mixin'
 //插件
 export default {
   name:"Home",
@@ -48,13 +49,13 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
 
     HomeSwiper,
     HomeRecommendView,
     HomeFeatureView,
 
   },
+  mixins:[backTopMixin],
   data(){
     return{
       banners:[],
@@ -66,7 +67,7 @@ export default {
       },
       goodskey:'pop',
       // showGoods,
-      isshow:false,
+      // isshow:false,
       tabOffsetTop:0,
       isTabFixed:false,
       saveY:0,
@@ -129,10 +130,6 @@ export default {
       this.$refs.tabControl1.currentIndex = index
       this.$refs.tabControl2.currentIndex = index
     },
-    backClick(){
-     this.$refs.scroll.scrollTo(0,0,1000)
-    //  console.log(this.$refs.scroll.massage);
-    },
     contentScroll(position){
       //1.判断BackTop 是否显示
        this.isshow = (-position.y) > 900 ? true : false 
@@ -171,7 +168,7 @@ export default {
 // scoped 作用域
 <style scoped>
 #home{
-  height: 100vh;
+  height: calc(100vh - 44px - 49px);
 }
 .home-nav{
   background-color: var(--color-tint);
@@ -188,8 +185,11 @@ export default {
   top: 42px;
 }
 .content{
-height: calc(100% - 54px);
+height: calc(100%);
 overflow: hidden;
 margin-top: 44px;
+}
+.back-top{
+  bottom: 50px;
 }
 </style>

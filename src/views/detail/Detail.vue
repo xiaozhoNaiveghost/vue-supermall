@@ -16,7 +16,9 @@
       <detail-comment-info ref="reccomment" :commentInfo='commentInfo'></detail-comment-info>
       <goods-list ref="reccommend" :goods='recommends'></goods-list>
     </scroll>
-    <detail-buttom-bar></detail-buttom-bar>
+    <detail-buttom-bar  @addCart="addCart"></detail-buttom-bar>
+     <back-top @click.native="backClick" 
+   v-show=isshow class="back-top"></back-top>
   </div>
 </template>
 
@@ -31,11 +33,13 @@ import DetailParamInfo from './childComps/DetailParamInfo.vue'
 import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
 import GoodsList from 'components/content/goods/GoodsList.vue'
 import DetailButtomBar from './childComps/DetailButtomBar.vue'
+
+
 //工具
 import {GetDetail,getRecommend,Goods,Shop,GoodsParam} from 'network/detail.js'
 import Scroll from 'components/common/scroll/Scroll.vue'
 import {debounce} from 'common/utils'
-
+import {backTopMixin} from 'common/mixin'
 export default {
   name:'Detail',
   components:{
@@ -50,8 +54,9 @@ export default {
     DetailButtomBar,
 
     Scroll,
-    
+     
   },
+  mixins:[backTopMixin],
   data(){
     return{
       iid : null,
@@ -65,7 +70,7 @@ export default {
       itemImgListener:null,
       themeTopYs:[],
       getThemeTopY:null,
-      currentIndex:0
+      currentIndex:0,
     }
   },
   created(){
@@ -118,12 +123,7 @@ export default {
   },
   destroyed(){
     this.$bus.$off('imgaeLoad',this.itemImgListener)
- 
-  
-  
-  
-  
-  
+
   },
   methods:{
     imageLoad(){
@@ -133,7 +133,7 @@ export default {
     },
     titleClick(index){
       // console.log(index);
-      this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],300)
+      this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],200)
     },
     contentScroll(position){
       // 1.获取y值
@@ -151,15 +151,33 @@ export default {
           this.$refs.nav.currenindex = this.currentIndex
         }
       }
+       //1.判断BackTop 是否显示
+       this.isshow = (-position.y) > 900 ? true : false 
+      
+      //2.决定tabControl是否吸顶(position:flexd)
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
+    },
+    addCart(){
+      // console.log('123456');
+      const product = {}
+      product.image = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice
+      product.iid = this.iid
+
+      // 将商品加入购物车当中
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart',product)
     }
   },
 }
 </script>
 <style scoped>
 #detail{
-  position: relative;
+  position: fixed;
   z-index: 99;
-  height: 100vh;
+  height: calc(100vh - 44px - 65px);
   background-color: #fff;
 }
 .detail-nav{
@@ -168,6 +186,6 @@ export default {
   background-color: #fff;
 }
 .content {
-  height: calc(100% - 44px);
+  height: calc(100%);
 }
 </style>

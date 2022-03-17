@@ -8,7 +8,7 @@
       </ul>
     </div>
     <div class="div1-botton-bar">
-      <div><a>加入购物车</a></div>
+      <div @click='addToCart'><a>加入购物车</a></div>
       <div><a>购买</a></div>
     </div>
   </div>
@@ -17,21 +17,26 @@
 <script>
 export default {
   name:'DetailButtomBar',
+  methods:{
+    addToCart(){
+     this.$emit('addCart')
+    }
+  }
 }
 </script>
 
 <style scoped>
 .bottom-bar{
   width: 100%;
-  height: 55px;
+  height: 58px;
   background:#fff;
 
-  position: relative;
-  bottom: 65px;
+  /* position: absolute; */
+  /* bottom: 65px; */
   display: flex;
 /* z-index: 999; */
-
-  /* position: fixed;
+position: fixed;
+  /* 
   left: 0;
   bottom: 0;
   z-index: 999; */
@@ -48,28 +53,34 @@ export default {
   list-style:none;
   flex: 1;
   font-size: 15px;
-  padding-top: 13px ;
+  /* padding-top: 13px ; */
 }
 .div-bottom-bar li:nth-child(1) {
-  background-image: url('../../../assets/img/detail/detail_bottom.png');
-  background-repeat :no-repeat;
-  background-size: 43px;
-  background-position-x: 10px;
-  background-position-y:  -104px;
+  background: url('../../../assets/img/detail/detail_bottom.png') no-repeat 15px -65px;
+  height: 40px;
+  /* overflow: hidden; */
+  background-size: 30px;
 }
 .div-bottom-bar li:nth-child(2) {
-  background-image: url('../../../assets/img/detail/detail_bottom.png');
-  background-repeat :no-repeat;
-  background-size: 43px;
-  background-position-x: 10px;
-  background-position-y:  -192px;
+  background: url('../../../assets/img/detail/detail_bottom.png') no-repeat 16px -127px;
+  height: 40px;
+  /* overflow: hidden; */
+  background-size: 30px;
 }
+
 .div-bottom-bar li:nth-child(3) {
-  background-image: url('../../../assets/img/detail/detail_bottom.png');
-  background-repeat :no-repeat;
-  background-size: 43px;
-  background-position-x: 10px;
-  background-position-y:  0px;
+  /* width: 35px; */
+  height: 40px;
+  background: url('../../../assets/img/detail/detail_bottom.png') no-repeat 15px 7px;
+  /* overflow: hidden; */
+  background-size: 30px;
+}
+.div-bottom-bar li a{
+  display: block;
+  height: 10px;
+  /* width: 40px; */
+  margin-top: 10px;
+  /* overflow: hidden; */
 }
 .div1-botton-bar{
   flex: 1;

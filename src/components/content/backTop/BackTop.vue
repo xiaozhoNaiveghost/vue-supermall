@@ -18,7 +18,7 @@ export default {
   float: left;
   /* top: 0; */
   right: 10px;
-  bottom: 60px;
+  bottom: -45px;
 }
 .back-top img{
   width: 60px;
