@@ -16,7 +16,7 @@
       <detail-comment-info ref="reccomment" :commentInfo='commentInfo'></detail-comment-info>
       <goods-list ref="reccommend" :goods='recommends'></goods-list>
     </scroll>
-    <detail-buttom-bar  @addCart="addCart"></detail-buttom-bar>
+    <detail-buttom-bar  @addCart="addToCart"></detail-buttom-bar>
      <back-top @click.native="backClick" 
    v-show=isshow class="back-top"></back-top>
   </div>
@@ -40,6 +40,8 @@ import {GetDetail,getRecommend,Goods,Shop,GoodsParam} from 'network/detail.js'
 import Scroll from 'components/common/scroll/Scroll.vue'
 import {debounce} from 'common/utils'
 import {backTopMixin} from 'common/mixin'
+
+import { mapActions } from 'vuex'
 export default {
   name:'Detail',
   components:{
@@ -126,6 +128,7 @@ export default {
 
   },
   methods:{
+    ...mapActions(['addCart']),
     imageLoad(){
       this.$refs.scroll.refresh()
 
@@ -157,7 +160,7 @@ export default {
       //2.决定tabControl是否吸顶(position:flexd)
       this.isTabFixed = (-position.y) > this.tabOffsetTop
     },
-    addCart(){
+    addToCart(){
       // console.log('123456');
       const product = {}
       product.image = this.topImages[0];
@@ -167,8 +170,15 @@ export default {
       product.iid = this.iid
 
       // 将商品加入购物车当中
+      // 1
       // this.$store.commit('addCart',product)
-      this.$store.dispatch('addCart',product)
+      this.addCart(product).then(res => {
+        console.log(res);
+      })
+
+      // this.$store.dispatch('addCart',product).then(res=>{
+      //   console.log(res);
+      // })
     }
   },
 }
